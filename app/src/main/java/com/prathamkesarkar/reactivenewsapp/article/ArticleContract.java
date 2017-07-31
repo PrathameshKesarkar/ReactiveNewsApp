@@ -20,6 +20,7 @@ public interface ArticleContract {
     interface View extends BaseView<Presenter> {
         void showMessage(String message);
         void showArticles(List<Article> articles);
+
     }
 
 }

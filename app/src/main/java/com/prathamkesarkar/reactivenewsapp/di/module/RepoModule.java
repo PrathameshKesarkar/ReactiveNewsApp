@@ -1,6 +1,7 @@
 package com.prathamkesarkar.reactivenewsapp.di.module;
 
 import com.prathamkesarkar.reactivenewsapp.data.source.NewsRepository;
+import com.prathamkesarkar.reactivenewsapp.data.source.local.LocalDataSource;
 import com.prathamkesarkar.reactivenewsapp.data.source.remote.RemoteDataSource;
 
 import javax.inject.Singleton;
@@ -17,7 +18,7 @@ public class RepoModule {
 
     @Provides
     @Singleton
-    NewsRepository provideRepository(RemoteDataSource remoteSource){
-        return new NewsRepository(remoteSource);
+    NewsRepository provideRepository(RemoteDataSource remoteSource, LocalDataSource dataSource){
+        return new NewsRepository(remoteSource,dataSource);
     }
 }

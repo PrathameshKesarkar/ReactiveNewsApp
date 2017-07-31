@@ -1,6 +1,7 @@
 package com.prathamkesarkar.reactivenewsapp.di.component;
 
 import com.prathamkesarkar.reactivenewsapp.article.ArticleActivity;
+import com.prathamkesarkar.reactivenewsapp.di.module.DatabaseModule;
 import com.prathamkesarkar.reactivenewsapp.di.module.NetworkModule;
 import com.prathamkesarkar.reactivenewsapp.di.module.RepoModule;
 
@@ -13,7 +14,7 @@ import dagger.Component;
  */
 
 @Singleton
-@Component(modules = {RepoModule.class,NetworkModule.class})
+@Component(modules = {RepoModule.class,NetworkModule.class, DatabaseModule.class})
 public interface ApplicationComponent {
     void inject(ArticleActivity target);
 }
