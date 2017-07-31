@@ -38,8 +38,9 @@ public class LocalDataSource implements NewsDataSource {
                     pojoArticle.setUrl(article.getUrl());
                     pojoArticle.setDescription(article.getDescription());
                     pojoArticle.setUrlToImage(article.getArticleImage());
-                    pojoArticle.setPublishedAt("null");
-
+                    pojoArticle.setPublishedDate(article.getPublished());
+                    pojoArticle.setFetchedDate(article.getFetchedAt());
+                    pojoArticle.setPublishedAt(article.getPublished().toString());
 
                     articleList.add(pojoArticle);
                     pojoArticle = null;
@@ -78,18 +79,19 @@ public class LocalDataSource implements NewsDataSource {
                     realmArticle.setUrl(article.getUrl());
                     realmArticle.setDescription(article.getDescription());
                     realmArticle.setTitle(article.getTitle());
+                    realmArticle.setPublished(article.getPublishedDate());
+                    realmArticle.setFetchedAt(article.getFetchedDate());
+                    pos++;
                     //This makes realm object available for GC
                     realmArticle = null;
                 }
                 //delete the article from the response.
                 else{
-                    //The reason we are decrementing the position counter is
                     //The Array List shifts the items to the left after removing the current item
-                    pos--;
                     articleList.remove(article);
 
                 }
-                pos++;
+
             } catch (Exception e) {
                 //Cancel the transaction in case of some error and close realm database.
                 realm.cancelTransaction();

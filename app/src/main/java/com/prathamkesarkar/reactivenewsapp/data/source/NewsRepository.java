@@ -10,6 +10,10 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -32,10 +36,10 @@ public class NewsRepository implements NewsDataSource {
     @Override
     public Observable<List<Article>> getArticles(String source) {
 
-           return Observable.merge(dataSource.getArticles(source),
-                    remoteSource.getArticles(source).map(dataSource::saveArticle))
-                    .subscribeOn(Schedulers.computation())
-                    .cache();
+        return Observable.merge(dataSource.getArticles(source).subscribeOn(Schedulers.computation()),
+                remoteSource.getArticles(source).map(dataSource::saveArticle).subscribeOn(Schedulers.io()))
+                .observeOn(Schedulers.io())
+                .cache();
 
     }
 }

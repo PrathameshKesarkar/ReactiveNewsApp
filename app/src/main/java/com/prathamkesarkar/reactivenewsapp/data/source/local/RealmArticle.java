@@ -19,6 +19,7 @@ public class RealmArticle implements RealmModel {
     private String url;
     private String articleImage;
     private Date published;
+    private Date fetchedAt;
 
     public String getDescription() {
         return description;
@@ -66,5 +67,13 @@ public class RealmArticle implements RealmModel {
 
     public void setPublished(Date published) {
         this.published = published;
+    }
+
+    public Date getFetchedAt() {
+        return fetchedAt;
+    }
+
+    public void setFetchedAt(Date fetchedAt) {
+        this.fetchedAt = fetchedAt;
     }
 }

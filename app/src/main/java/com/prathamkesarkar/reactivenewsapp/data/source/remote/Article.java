@@ -1,6 +1,6 @@
 package com.prathamkesarkar.reactivenewsapp.data.source.remote;
 
-import java.util.Objects;
+import java.util.Date;
 
 /**
  * Created by patty on 20/07/17.
@@ -13,6 +13,16 @@ public class Article {
     private String url;
     private String urlToImage;
     private String publishedAt;
+    private Date publishedDate;
+    private Date fetchedDate;
+
+    public Date getFetchedDate() {
+        return fetchedDate;
+    }
+
+    public void setFetchedDate(Date fetchedDate) {
+        this.fetchedDate = fetchedDate;
+    }
 
     public void setAuthor(String author) {
         this.author = author;
@@ -60,6 +70,14 @@ public class Article {
 
     public String getPublishedAt() {
         return publishedAt;
+    }
+
+    public Date getPublishedDate() {
+        return publishedDate;
+    }
+
+    public void setPublishedDate(Date publishedDate) {
+        this.publishedDate = publishedDate;
     }
 
     @Override
