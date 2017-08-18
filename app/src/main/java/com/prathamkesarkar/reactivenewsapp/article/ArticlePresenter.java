@@ -5,9 +5,6 @@ import android.util.Log;
 import com.prathamkesarkar.reactivenewsapp.data.source.NewsRepository;
 import com.prathamkesarkar.reactivenewsapp.data.source.remote.Article;
 
-import java.util.List;
-
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -19,7 +16,6 @@ public class ArticlePresenter implements ArticleContract.Presenter {
 
     ArticleContract.View view;
     CompositeDisposable disposable;
-    Observable<List<Article>> tempObservable;
     private NewsRepository repository;
 
     private ArticlePresenter() {
@@ -49,12 +45,10 @@ public class ArticlePresenter implements ArticleContract.Presenter {
     @Override
     public void loadArticles() {
 
-        if(tempObservable==null)
-            tempObservable =repository.getArticles("techcrunch")
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext(view::showArticles)
-                    .doOnError(throwable -> Log.d(Article.class.getSimpleName(), throwable.toString()));
-        disposable.add(tempObservable.subscribe());
+        disposable.add(repository.getArticles("techcrunch")
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(articles -> view.showArticles(articles)
+                        , throwable -> Log.d(Article.class.getSimpleName(), throwable.toString())));
 
     }
 

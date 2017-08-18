@@ -1,5 +1,7 @@
 package com.prathamkesarkar.reactivenewsapp.data.source;
 
+import android.util.Log;
+
 import com.prathamkesarkar.reactivenewsapp.data.source.local.LocalDataSource;
 import com.prathamkesarkar.reactivenewsapp.data.source.remote.Article;
 import com.prathamkesarkar.reactivenewsapp.data.source.remote.RemoteDataSource;
@@ -9,11 +11,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -38,8 +35,7 @@ public class NewsRepository implements NewsDataSource {
 
         return Observable.merge(dataSource.getArticles(source).subscribeOn(Schedulers.computation()),
                 remoteSource.getArticles(source).map(dataSource::saveArticle).subscribeOn(Schedulers.io()))
-                .observeOn(Schedulers.io())
-                .cache();
+                .observeOn(Schedulers.io());
 
     }
 }

@@ -3,6 +3,8 @@ package com.prathamkesarkar.reactivenewsapp.article;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,7 +17,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ArticleActivity extends AppCompatActivity implements ArticleContract.View,SwipeRefreshLayout.OnRefreshListener {
+public class ArticleActivity extends AppCompatActivity implements ArticleContract.View, SwipeRefreshLayout.OnRefreshListener {
 
 
     private ArticleContract.Presenter presenter;
@@ -24,20 +26,32 @@ public class ArticleActivity extends AppCompatActivity implements ArticleContrac
     NewsRepository repository;
 
     private SwipeRefreshLayout refreshLayout;
+    private RecyclerView recyclerView;
+    private ArticleAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((ReactiveNewsApplication)getApplication()).getComponent().inject(this);
+        ((ReactiveNewsApplication) getApplication()).getComponent().inject(this);
         setContentView(R.layout.activity_main);
 
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
         refreshLayout.setOnRefreshListener(this);
+        recyclerView = (RecyclerView) findViewById(R.id.article_list);
+        adapter = new ArticleAdapter(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
 
         presenter = new ArticlePresenter(repository);
         presenter.bind(this);
         refreshLayout.setRefreshing(true);
         presenter.loadArticles();
+
 
     }
 
@@ -48,17 +62,16 @@ public class ArticleActivity extends AppCompatActivity implements ArticleContrac
 
     @Override
     public void showMessage(String message) {
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showArticles(List<Article> articles) {
-        if(refreshLayout.isRefreshing()){
+       if(refreshLayout.isRefreshing()){
             refreshLayout.setRefreshing(false);
         }
+        adapter.setArticleList(articles);
 
-        for(Article article:articles)
-        Log.d(Article.class.getSimpleName(),article.getTitle());
     }
 
 

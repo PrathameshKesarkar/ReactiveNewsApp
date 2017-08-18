@@ -30,15 +30,17 @@ public class RemoteDataSource implements NewsDataSource {
         Log.d("RemoteSource","Network Started");
         return apiService.getArticles(source)
                 .map(ArticleResponse::getArticleList)
-                .map(this::addDate);
+                .map(this::addDateToArticle);
 
     }
 
-
-    public List<Article> addDate(List<Article> articles) {
+    /**
+     * Adds the article
+     * */
+    public List<Article> addDateToArticle(List<Article> articles) {
         Date currentDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-
+        Log.d("Repository","Fuck you cache");
         for (Article article :articles) {
             try {
                 article.setPublishedDate(sdf.parse(article.getPublishedAt()));
